@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jerry.shiro_springboot_mybatis_test1.dao.userDao">
+    <insert id="createUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.jerry.shiro_springboot_mybatis_test1.entity.User">
+        insert into springboot.user(username, password, salt) values(#{username},#{password},#{salt})
+    </insert>
+    <select id="findOne" resultType="com.jerry.shiro_springboot_mybatis_test1.entity.User" parameterType="java.lang.Long">
+        select * from springboot.user where id=#{id}
+    </select>
+    <update id="updateUser" parameterType="com.jerry.shiro_springboot_mybatis_test1.entity.User">
+        update springboot.user set password=#{password} where id=#{id}
+    </update>
+    <select id="findByUsername" resultType="com.jerry.shiro_springboot_mybatis_test1.entity.User" parameterType="java.lang.String">
+        select * from springboot.user where username=#{username}
+    </select>
+    <select id="findRoles" resultType="java.lang.String" parameterType="java.lang.String">
+        select role from springboot.user u,springboot.role r,springboot.user_role ur
+        where u.username=#{username}
+        and u.id=ur.userId
+        and r.id=ur.roleId
+    </select>
+    <select id="findPermissions" resultType="java.lang.String" parameterType="java.lang.String">
+        select permission from springboot.user u,springboot.role r,springboot.permission p,springboot.user_role ur,springboot.role_permission rp
+        where u.username=#{username} and u.id=ur.userId and r.id=ur.roleId and r.id=rp.roleId and p.id=rp.permissionId
+    </select>
+</mapper>
